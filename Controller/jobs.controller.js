@@ -100,14 +100,14 @@ export const allRecentJobs = async (req, res) => {
         .toArray();
 
     if (!jobs || jobs.length === 0) {
-            return res.status(404).send({
-                success: false,
-                message: "No jobs found for this user"
-            });
-        }
+        return res.status(404).send({
+            success: false,
+            message: "No jobs found for this user"
+        });
+    }
     res.status(200).send(
         {
-            "jobs":jobs
+            "jobs": jobs
         }
     )
 
@@ -119,15 +119,62 @@ export const allJobs = async (req, res) => {
         .toArray();
 
     if (!jobs || jobs.length === 0) {
-            return res.status(404).send({
-                success: false,
-                message: "No jobs found for this user"
-            });
-        }
+        return res.status(404).send({
+            success: false,
+            message: "No jobs found for this user"
+        });
+    }
     res.status(200).send(
         {
-            "jobs":jobs
+            "jobs": jobs
         }
     )
 
+}
+
+
+export const updateJob = async (req, res) => {
+    const { jobId } = req.params;
+    const { title, postedBy, category, summary, coverImage, userEmail, uid, createdAt } = req.body;
+    try {
+
+        const result = await db.collection('jobs').updateOne(
+            { _id: new ObjectId(jobId) },
+            {
+                $set: {
+                    title: title,
+                    postedBy: postedBy,
+                    category: category,
+                    summary: summary,
+                    coverImage: coverImage,
+                    userEmail: userEmail,
+                    uid: uid,
+                    createdAt: createdAt
+                }
+            }
+        );
+
+        if (result.matchedCount === 0) {
+            return res.status(404).send({
+                success: false,
+                message: "Job not found"
+            });
+        }
+
+        return res.send({
+            success: true,
+            message: "Job updated successfully",
+            data: {
+                modifiedCount: result.modifiedCount,
+                matchedCount: result.matchedCount
+            }
+        });
+
+
+    } catch (error) {
+        return res.status(500).send({
+            success: false,
+            message: error.message
+        });
+    }
 }
