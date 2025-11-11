@@ -93,43 +93,59 @@ export const myJobs = async (req, res) => {
 
 
 export const allRecentJobs = async (req, res) => {
-    const jobs = await db.collection('jobs')
-        .find()
-        .sort({ createdAt: -1 })
-        .limit(10)
-        .toArray();
+    try {
+        const jobs = await db.collection('jobs')
+            .find()
+            .sort({ createdAt: -1 })
+            .limit(10)
+            .toArray();
 
-    if (!jobs || jobs.length === 0) {
-        return res.status(404).send({
+        if (!jobs || jobs.length === 0) {
+            return res.status(404).send({
+                success: false,
+                message: "No recent jobs found"
+            });
+        }
+        
+        res.status(200).send({
+            success: true,
+            count: jobs.length,
+            jobs: jobs
+        });
+        
+    } catch (error) {
+        return res.status(500).send({
             success: false,
-            message: "No jobs found for this user"
+            message: error.message
         });
     }
-    res.status(200).send(
-        {
-            "jobs": jobs
-        }
-    )
-
 }
 
 export const allJobs = async (req, res) => {
-    const jobs = await db.collection('jobs')
-        .find()
-        .toArray();
+    try {
+        const jobs = await db.collection('jobs')
+            .find()
+            .toArray();
 
-    if (!jobs || jobs.length === 0) {
-        return res.status(404).send({
+        if (!jobs || jobs.length === 0) {
+            return res.status(404).send({
+                success: false,
+                message: "No jobs found"
+            });
+        }
+        
+        res.status(200).send({
+            success: true,
+            count: jobs.length,
+            jobs: jobs
+        });
+        
+    } catch (error) {
+        return res.status(500).send({
             success: false,
-            message: "No jobs found for this user"
+            message: error.message
         });
     }
-    res.status(200).send(
-        {
-            "jobs": jobs
-        }
-    )
-
 }
 
 
