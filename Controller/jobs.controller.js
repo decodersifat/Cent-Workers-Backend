@@ -9,7 +9,7 @@ export const addJobs = async (req, res) => {
 
     try {
 
-        const collection = await db.collection("jobs");
+        const collection = db.collection("jobs");
         const cursor = await collection.insertOne(
             {
                 title: title,
@@ -23,13 +23,17 @@ export const addJobs = async (req, res) => {
             }
         )
 
-        res.send({
+        res.status(201).send({
+            success: true,
             message: "Job Added",
-            details: cursor
+            data: cursor
         })
 
     } catch (error) {
-        res.send(error.message)
+        res.status(500).send({
+            success: false,
+            message: error.message
+        })
     }
 }
 
@@ -40,24 +44,29 @@ export const jobDetails = async (req, res) => {
 
     try {
 
-        const collection = await db.collection('jobs');
+        const collection = db.collection('jobs');
         const job = await collection.findOne({
             _id: new ObjectId(jobID)
         });
 
         if (!job) {
             return res.status(404).send({
-                "message": "Job Not Found"
+                success: false,
+                message: "Job Not Found"
             });
         }
 
-        return res.send({
-            "message": "Job Founded",
-            "Job": job
+        return res.status(200).send({
+            success: true,
+            message: "Job Found",
+            data: job
         })
 
     } catch (error) {
-
+        return res.status(500).send({
+            success: false,
+            message: error.message
+        });
     }
 };
 

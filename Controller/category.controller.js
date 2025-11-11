@@ -11,24 +11,20 @@ export const addCategory = async (req, res) => {
             uid: uid,
             image: image,
             urlSlug: urlSlug,
-            createdAt: new Date()
+            createdAt: new Date().toISOString()
          })
 
-         if (!category){
-            return res.status(500).send({
-                "message":"No Category Created",
-            })
-         }
-
-         return res.status(200).send({
-            "message":"Category Created",
+         return res.status(201).send({
+            success: true,
+            message: "Category Created",
             data: category
          })
 
     } catch (error) {
         return res.status(500).send({
-                "message":error.message
-            })
+            success: false,
+            message: error.message
+        })
     }
 }
 
