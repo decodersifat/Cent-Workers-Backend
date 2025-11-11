@@ -178,3 +178,36 @@ export const updateJob = async (req, res) => {
         });
     }
 }
+
+
+export const deleteJob = async (req, res) => {
+    const { jobId } = req.params;
+
+    try {
+        
+        const result = await db.collection('jobs').deleteOne({ 
+            _id: new ObjectId(jobId) 
+        });
+
+        if (result.deletedCount === 0) {
+            return res.status(404).send({
+                success: false,
+                message: "Job not found"
+            });
+        }
+
+        return res.send({
+            success: true,
+            message: "Job deleted successfully",
+            data: {
+                deletedCount: result.deletedCount
+            }
+        });
+
+    } catch (error) {
+        return res.status(500).send({
+            success: false,
+            message: error.message
+        });
+    }
+}
