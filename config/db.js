@@ -19,26 +19,33 @@ const client = new MongoClient(uri, {
   connectTimeoutMS: 10000,
 });
 
-let db; 
+let db;
+let isConnected = false;
 
 async function connectDB() {
   if (!uri) return;
+  
+  // If already connected, reuse the connection
+  if (isConnected && db) {
+    console.log("♻️ Using existing database connection");
+    return db;
+  }
+
   try {
-    
     await client.connect();
-
     db = client.db(process.env.MONGODB_DB_NAME);
-
-
     await client.db("admin").command({ ping: 1 });
+    isConnected = true;
     console.log("✅ MongoDB connection established and ping successful.");
+    return db;
   } catch (err) {
-
+    isConnected = false;
     if (err.name === 'MongoNetworkError') {
       console.error("❌ Network/TLS error while connecting to MongoDB:", err);
     } else {
       console.error("❌ DB Connection Failed:", err);
     }
+    throw err;
   }
 }
 
