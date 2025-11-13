@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post('/add-job', addJobs);
 router.get('/job-details/:jobID', jobDetails);
-router.post('/myAddedJobs/:email', myJobs);
+router.get('/myAddedJobs/:email', myJobs);
 router.get('/recent-jobs', allRecentJobs);
 router.get('/all-jobs', allJobs);
 router.put('/update-job/:jobId', updateJob);
