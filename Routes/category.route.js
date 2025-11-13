@@ -9,7 +9,7 @@ router.post('/add-category', addCategory);
 
 router.get('/all-categories', getAllCategories);
 router.get('/category/:categoryId', getCategoryById);
-router.get('/user-categories/:uid', getCategoriesByUser);
+router.get('/user-categories/:email', getCategoriesByUser);
 
 
 router.put('/update-category/:categoryId', updateCategory);

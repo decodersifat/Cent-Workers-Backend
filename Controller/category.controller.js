@@ -3,12 +3,12 @@ import { ObjectId } from 'mongodb';
 
 export const addCategory = async (req, res) => {
 
-    const { title, uid, image, urlSlug } = req.body;
+    const { title, email, image, urlSlug } = req.body;
 
     try {
          const category = await db.collection('category').insertOne({
             title: title,
-            uid: uid,
+            email: email,
             image: image,
             urlSlug: urlSlug,
             createdAt: new Date().toISOString()
@@ -84,10 +84,10 @@ export const getCategoryById = async (req, res) => {
 }
 
 export const getCategoriesByUser = async (req, res) => {
-    const { uid } = req.params;
+    const { email } = req.params;
 
     try {
-        const categories = await db.collection('category').find({ uid: uid }).toArray();
+        const categories = await db.collection('category').find({ email: email }).toArray();
 
         if (!categories || categories.length === 0) {
             return res.status(404).send({
