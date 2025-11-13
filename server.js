@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import jobsRoute from "./Routes/jobs.route.js";
 import categoryRoute from "./Routes/category.route.js";
 import acceptedJobsRoute from "./Routes/acceptedJobs.route.js";
+import userRoute from "./Routes/user.route.js";
 import connectDB from "./config/db.js";
 
 dotenv.config();
@@ -57,6 +58,7 @@ app.get("/", (req, res) => {
 app.use("/api/v1/jobs", jobsRoute);
 app.use("/api/v1/category", categoryRoute);
 app.use("/api/v1/accepted-jobs", acceptedJobsRoute);
+app.use("/api/v1/users", userRoute);
 
 
 app.use((err, req, res, next) => {
