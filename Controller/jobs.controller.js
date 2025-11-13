@@ -5,7 +5,7 @@ import { db } from '../config/db.js';
 
 export const addJobs = async (req, res) => {
 
-    const { title, postedBy, category, summary, coverImage, userEmail, uid, createdAt } = req.body;
+    const { title, postedBy, category, summary, coverImage, userEmail, uid } = req.body;
 
     try {
 
@@ -19,7 +19,7 @@ export const addJobs = async (req, res) => {
                 coverImage: coverImage,
                 userEmail: userEmail,
                 uid: uid,
-                createdAt: createdAt
+                createdAt: new Date().toISOString()
             }
         )
 
@@ -160,7 +160,7 @@ export const allJobs = async (req, res) => {
 
 export const updateJob = async (req, res) => {
     const { jobId } = req.params;
-    const { title, postedBy, category, summary, coverImage, userEmail, uid, createdAt } = req.body;
+    const { title, category, summary, coverImage } = req.body;
     try {
 
         const result = await db.collection('jobs').updateOne(
@@ -168,13 +168,10 @@ export const updateJob = async (req, res) => {
             {
                 $set: {
                     title: title,
-                    postedBy: postedBy,
                     category: category,
                     summary: summary,
                     coverImage: coverImage,
-                    userEmail: userEmail,
-                    uid: uid,
-                    createdAt: createdAt
+                    updatedAt: new Date().toISOString()
                 }
             }
         );

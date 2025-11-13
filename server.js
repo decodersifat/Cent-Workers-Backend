@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import jobsRoute from "./Routes/jobs.route.js";
 import categoryRoute from "./Routes/category.route.js";
+import acceptedJobsRoute from "./Routes/acceptedJobs.route.js";
 import connectDB from "./config/db.js";
 
 dotenv.config();
@@ -10,7 +11,7 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Initialize DB connection
+
 let dbConnected = false;
 
 async function initDB() {
@@ -20,7 +21,7 @@ async function initDB() {
   }
 }
 
-// Middleware
+
 app.use(
   cors({
     origin: "*",
@@ -30,7 +31,7 @@ app.use(
 );
 app.use(express.json());
 
-// DB connection middleware for serverless
+
 app.use(async (req, res, next) => {
   try {
     await initDB();
@@ -55,8 +56,9 @@ app.get("/", (req, res) => {
 
 app.use("/api/v1/jobs", jobsRoute);
 app.use("/api/v1/category", categoryRoute);
+app.use("/api/v1/accepted-jobs", acceptedJobsRoute);
 
-// Error handling middleware
+
 app.use((err, req, res, next) => {
   console.error("Error:", err);
   res.status(500).json({
@@ -73,7 +75,6 @@ app.use((req, res) => {
   });
 });
 
-// Start server (not for Vercel serverless)
 if (process.env.VERCEL !== "1") {
   app.listen(port, () => {
     console.log(`🚀 Server running at http://localhost:${port}`);
