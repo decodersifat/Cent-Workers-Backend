@@ -2,15 +2,15 @@ import { db } from '../config/db.js';
 import { ObjectId } from 'mongodb';
 
 export const getUserProfile = async (req, res) => {
-    const { uid } = req.params;
+    const { email } = req.params;
 
     try {
         const usersCollection = db.collection('users');
-        let user = await usersCollection.findOne({ uid: uid });
+        let user = await usersCollection.findOne({ email: email });
 
         if (!user) {
             user = {
-                uid: uid,
+                email: email,
                 displayName: '',
                 photoURL: '',
                 bio: '',
@@ -36,14 +36,14 @@ export const getUserProfile = async (req, res) => {
 };
 
 export const updateUserProfile = async (req, res) => {
-    const { uid } = req.params;
+    const { email } = req.params;
     const { displayName, photoURL, bio, skills, location } = req.body;
 
     try {
         const usersCollection = db.collection('users');
         
         const result = await usersCollection.updateOne(
-            { uid: uid },
+            { email: email },
             {
                 $set: {
                     displayName: displayName,

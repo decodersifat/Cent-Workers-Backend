@@ -3,7 +3,7 @@ import { getUserProfile, updateUserProfile } from "../Controller/user.controller
 
 const router = Router();
 
-router.get('/profile/:uid', getUserProfile);
-router.put('/profile/:uid', updateUserProfile);
+router.get('/profile/:email', getUserProfile);
+router.put('/profile/:email', updateUserProfile);
 
 export default router;
